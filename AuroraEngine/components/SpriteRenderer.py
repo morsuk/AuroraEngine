@@ -1,11 +1,12 @@
 import OpenGL.GL as opengl
-from ..essentials import Component, GameObject, Console
+from ..essentials import Component, GameObject, Console, Color32
 
 class SpriteRenderer(Component):
 
-    def __init__(self, gameObject: GameObject, sprite: str = "None"):
+    def __init__(self, gameObject: GameObject, sprite: str = "None", color:Color32 = Color32(255, 255, 255, 1)):
         super().__init__(gameObject)
         self.sprite = sprite
+        self.color:Color32 = color
 
 
     def start(self):
@@ -22,7 +23,7 @@ class SpriteRenderer(Component):
         match self.sprite:
             case "rectangle":
                 opengl.glBegin(opengl.GL_QUADS)
-                opengl.glColor3f(1.0, 0.0, 0.0)
+                opengl.glColor3f(*self.color.getColor())
                 opengl.glVertex2f(-0.5, -0.5)
                 opengl.glVertex2f( 0.5, -0.5)
                 opengl.glVertex2f( 0.5,  0.5)
@@ -32,7 +33,7 @@ class SpriteRenderer(Component):
 
             case "triangle":
                 opengl.glBegin(opengl.GL_TRIANGLES)
-                opengl.glColor3f(1.0, 0.0, 0.0)
+                opengl.glColor3f(*self.color.getColor())
                 opengl.glVertex2f(-0.5, -0.5)
                 opengl.glVertex2f( 0.5, -0.5)
                 opengl.glVertex2f( 0.0,  0.5)

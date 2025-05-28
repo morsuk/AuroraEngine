@@ -7,6 +7,10 @@ import time
 from typing import Optional
 
 class Vector2:
+    
+    zero: "Vector2"
+    one: "Vector2"
+    
     def __init__(self, x: float, y: float):
         self.x = x
         self.y = y
@@ -19,18 +23,9 @@ class Vector2:
         """Returns direction of the vector, without retaining it's magnitude."""
         mag = self.magnitude()
         if mag == 0:
-            return Vector2.zero()
+            return Vector2.zero
         return Vector2(self.x / mag, self.y / mag)
     
-    @staticmethod
-    def zero() -> "Vector2":
-        """Returns a Vector2(0, 0)."""
-        return Vector2(0, 0)
-    
-    @staticmethod
-    def one() -> "Vector2":
-        """Returns a Vector2(1, 1)."""
-        return Vector2(1, 1)
     
     def __str__(self) -> str:
         return f"Vector2({self.x}, {self.y})"
@@ -82,6 +77,11 @@ class Vector2:
     def lerp(vec1: "Vector2", vec2: "Vector2", t: float) -> "Vector2":
         """Returns a vector between the two argument vectors dependent to the value of t."""
         return Vector2(vec1.x + (vec2.x - vec1.x) * t, vec1.y + (vec2.y - vec1.y) * t)
+
+
+Vector2.zero = Vector2(0,0)
+Vector2.one = Vector2(1,1)
+
 
 class Vector3:
     def __init__(self, x: float, y: float, z: float):
@@ -269,7 +269,7 @@ class Quaternion:
 
 
 class Transform:
-    def __init__(self, position: Vector2 = Vector2.zero(), rotation: float = 0, scale: Vector2 = Vector2.zero()) -> None:
+    def __init__(self, position: Vector2 = Vector2.zero, rotation: float = 0, scale: Vector2 = Vector2.zero) -> None:
         self.position: Vector2 = position
         self.rotation: float = rotation
         self.scale: Vector2 = scale
@@ -288,7 +288,7 @@ class Transform:
 
 
 class GameObject:
-    def __init__(self, name: str, transform: Transform = Transform(Vector2.zero(), 0, Vector2.one())):
+    def __init__(self, name: str, transform: Transform = Transform(Vector2.zero, 0, Vector2.one)):
         self.name: str = name
         self.transform = transform
         self.components: list[Component] = []
@@ -327,7 +327,7 @@ class GameObject:
                 return -Vector2(cos(angle), sin(angle))
             
             case _:
-                return Vector2.zero()
+                return Vector2.zero
             
 
 class Component:
@@ -537,6 +537,13 @@ class Mathf:
     
 class Color32:
     _1o255 = 1.0 / 255.0
+    
+    red: "Color32"
+    green: "Color32"
+    blue: "Color32"
+    white: "Color32"
+    black: "Color32"
+    
     def __init__(self, r: (str | float), g: float = 0, b: float = 0, a: float = 1):
         if isinstance(r, str):
             hex_color = r.lstrip("#")
@@ -567,7 +574,7 @@ class Color32:
 
 
     def getColor(self) -> tuple[float, float, float, float]:
-        """Returns the color as a tuple (r, g, b, a) with values between 0.0 and 1.0."""
+        """Returns the color as a tuple (r, g, b) with values between 0.0 and 1.0."""
         return (self.r, self.g, self.b, self.a)
     
     @staticmethod
@@ -579,3 +586,9 @@ class Color32:
             c1.b + (c2.b - c1.b) * t,
             c1.a + (c2.a - c1.a) * t
         )
+        
+Color32.red = Color32(255, 0, 0, 1)
+Color32.green = Color32(0,255,0,1)
+Color32.blue = Color32(0,0,255,1)
+Color32.white = Color32(255,255,255,1)
+Color32.black = Color32(0,0,0,1)
